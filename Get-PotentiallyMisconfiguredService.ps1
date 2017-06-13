@@ -22,8 +22,6 @@ Function Get-PotentiallyMisconfiguredService {
 		.Example
 
 		PS C:\> Get-PotentiallyMisconfiguredServices -ComputerName Client10E-01, ClientXPsp3-07 -Credential (Get-Credential) | Format-Table PSComputerName, PathName, StartName, Name -AutoSize
-		cmdlet Get-Credential at command pipeline position 1
-		Supply values for the following parameters:
 
 		PSComputerName PathName                                                     StartName   Name                         
 		-------------- --------                                                     ---------   ----                         
@@ -39,8 +37,6 @@ Function Get-PotentiallyMisconfiguredService {
 		.Example
 
 		PS C:\> Get-PotentiallyMisconfiguredServices -FilePath .\computers.txt -Credential (Get-Credential) | Format-Table PSComputerName, PathName, StartName, Name -AutoSize
-		cmdlet Get-Credential at command pipeline position 1
-		Supply values for the following parameters:
 
 		PSComputerName PathName                                                     StartName   Name                         
 		-------------- --------                                                     ---------   ----                         
