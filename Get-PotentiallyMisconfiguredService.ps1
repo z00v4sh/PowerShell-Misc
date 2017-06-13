@@ -121,7 +121,6 @@ Function Get-PotentiallyMisconfiguredService {
                     (
                         $_.StartName -notlike "*local*" -and 
                         $_.StartName -notlike "*networkservice*"
-
                     )
                 }
 
