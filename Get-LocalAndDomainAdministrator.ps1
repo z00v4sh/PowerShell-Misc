@@ -1,25 +1,25 @@
 Function Get-LocalAdministrator {
+    
     <#
-
         .Synopsis   
-		Gets members of the local Administrators group on local or remote computer.
+        Gets members of the local Administrators group on local or remote computer.
 
-		.Description
-		The Get-LocalAdministrator function gets all members of the local Administrators group. 
+        .Description
+        The Get-LocalAdministrator function gets all members of the local Administrators group. 
         The returned members can be either UserAccount entities or Group entities.
         For Group entities further quering is required to get all users part of that group.
-		It uses Wsman protocol for hosts with that capability and Dcom otherwise.
+        It uses Wsman protocol for hosts with that capability and Dcom otherwise.
 
-		.Parameter ComputerName
-		A comma delimited list of computers.
+        .Parameter ComputerName
+        A comma delimited list of computers.
 
-		.Parameter FilePath
-		Import computers from the specified file. Make sure the file contains a single computer per line.
+        .Parameter FilePath
+        Import computers from the specified file. Make sure the file contains a single computer per line.
 
-		.Parameter Credential
-		Credential to use for retrieving services, used by the New-CimSession cmdlet.
+        .Parameter Credential
+        Credential to use for retrieving services, used by the New-CimSession cmdlet.
 
-		.Example
+        .Example
 
         PS C:\> Get-LocalAdministrator -ComputerName Client7sp1-06, ClientXPsp3-07 -Credential (Get-Credential) | Format-Table -AutoSize 
 
@@ -131,23 +131,24 @@ Function Get-LocalAdministrator {
 
 Function Get-DomainAdmin {
     <#
-    .SYNOPSIS
-    Gets all domain admins user accounts.
-    
-    .DESCRIPTION
-    Gets all domain admins user accounts. Local computer needs to be domain joined.
-    
-    .EXAMPLE
+        .SYNOPSIS
+        Gets all domain admins user accounts.
 
-    PS C:\> Get-DomainAdmins
+        .DESCRIPTION
+        Gets all domain admins user accounts. Local computer needs to be domain joined.
 
-    Name             Caption                                    AccountType                               SID                                       Domain                                   
-    ----             -------                                    -----------                               ---                                       ------                                   
-    Administrator    ZOOVASH\Administrator                      512                                       S-1-5-21-650147352-1135740473-26879744... ZOOVASH                                  
-    cnadmin          ZOOVASH\cnadmin                            512                                       S-1-5-21-650147352-1135740473-26879744... ZOOVASH                                  
-    cnhelp           ZOOVASH\cnhelp                             512                                       S-1-5-21-650147352-1135740473-26879744... ZOOVASH                                  
+        .EXAMPLE
+
+        PS C:\> Get-DomainAdmins
+
+        Name             Caption                                    AccountType                               SID                                       Domain                                   
+        ----             -------                                    -----------                               ---                                       ------                                   
+        Administrator    ZOOVASH\Administrator                      512                                       S-1-5-21-650147352-1135740473-26879744... ZOOVASH                                  
+        cnadmin          ZOOVASH\cnadmin                            512                                       S-1-5-21-650147352-1135740473-26879744... ZOOVASH                                  
+        cnhelp           ZOOVASH\cnhelp                             512                                       S-1-5-21-650147352-1135740473-26879744... ZOOVASH                                  
 
     #>
+
     if ( $env:USERDOMAIN -eq $env:COMPUTERNAME ) {
         Write-Error -Message '[-] Local computer is not in a domain' -ErrorAction Stop
     }

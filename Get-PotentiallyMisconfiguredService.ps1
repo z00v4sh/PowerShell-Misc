@@ -1,67 +1,67 @@
 Function Get-PotentiallyMisconfiguredService {
 
     <#
-		.Synopsis
-		Gets potentially misconfigured services on local or remote computer.
+        .Synopsis
+        Gets potentially misconfigured services on local or remote computer.
 
-		.Description
-		The Get-PotentiallyMisconfiguredService function gets all Services (running or stopped) and checks for potentially misconfigured services.
-		A potentially misconfigured service is one that has the Path outside of WinDir, ProgramFiles or starts under the context of a different user than Local System, Network Service.
-		Further investigation is required to confirm the misconfiguration status. 
-		It uses Wsman protocol for hosts with that capability and Dcom otherwise.
+        .Description
+        The Get-PotentiallyMisconfiguredService function gets all Services (running or stopped) and checks for potentially misconfigured services.
+        A potentially misconfigured service is one that has the Path outside of WinDir, ProgramFiles or starts under the context of a different user than Local System, Network Service.
+        Further investigation is required to confirm the misconfiguration status. 
+        It uses Wsman protocol for hosts with that capability and Dcom otherwise.
 
-		.Parameter ComputerName
-		A comma delimited list of computers.
+        .Parameter ComputerName
+        A comma delimited list of computers.
 
-		.Parameter FilePath
-		Import computers from the specified file. Make sure the file contains a single computer per line.
+        .Parameter FilePath
+        Import computers from the specified file. Make sure the file contains a single computer per line.
 
-		.Parameter Credential
-		Credential to use for retrieving services, used by the New-CimSession cmdlet.
+        .Parameter Credential
+        Credential to use for retrieving services, used by the New-CimSession cmdlet.
 
-		.Example
+        .Example
 
-		PS C:\> Get-PotentiallyMisconfiguredServices -ComputerName Client10E-01, ClientXPsp3-07 -Credential (Get-Credential) | Format-Table PSComputerName, PathName, StartName, Name -AutoSize
+        PS C:\> Get-PotentiallyMisconfiguredServices -ComputerName Client10E-01, ClientXPsp3-07 -Credential (Get-Credential) | Format-Table PSComputerName, PathName, StartName, Name -AutoSize
 
-		PSComputerName PathName                                                     StartName   Name                         
-		-------------- --------                                                     ---------   ----                         
-		Client10E-01   C:\Windows\system32\svchost.exe -k UnistackSvcGroup                      CDPUserSvc_21c65a            
-		Client10E-01   C:\Windows\system32\svchost.exe -k UnistackSvcGroup                      MessagingService_21c65a      
-		Client10E-01   C:\Windows\system32\svchost.exe -k UnistackSvcGroup                      OneSyncSvc_21c65a            
-		Client10E-01   C:\Windows\system32\svchost.exe -k UnistackSvcGroup                      PimIndexMaintenanceSvc_21c65a
-		Client10E-01   C:\Windows\System32\svchost.exe -k UnistackSvcGroup                      UnistoreSvc_21c65a           
-		Client10E-01   C:\Windows\system32\svchost.exe -k UnistackSvcGroup                      UserDataSvc_21c65a           
-		Client10E-01   C:\Windows\system32\svchost.exe -k UnistackSvcGroup                      WpnUserService_21c65a        
-		ClientXPsp3-07 C:\Documents and Settings\cnlocal\Desktop\StopMeIfYouCan.exe LocalSystem StopMe                       
+        PSComputerName PathName                                                     StartName   Name                         
+        -------------- --------                                                     ---------   ----                         
+        Client10E-01   C:\Windows\system32\svchost.exe -k UnistackSvcGroup                      CDPUserSvc_21c65a            
+        Client10E-01   C:\Windows\system32\svchost.exe -k UnistackSvcGroup                      MessagingService_21c65a      
+        Client10E-01   C:\Windows\system32\svchost.exe -k UnistackSvcGroup                      OneSyncSvc_21c65a            
+        Client10E-01   C:\Windows\system32\svchost.exe -k UnistackSvcGroup                      PimIndexMaintenanceSvc_21c65a
+        Client10E-01   C:\Windows\System32\svchost.exe -k UnistackSvcGroup                      UnistoreSvc_21c65a           
+        Client10E-01   C:\Windows\system32\svchost.exe -k UnistackSvcGroup                      UserDataSvc_21c65a           
+        Client10E-01   C:\Windows\system32\svchost.exe -k UnistackSvcGroup                      WpnUserService_21c65a        
+        ClientXPsp3-07 C:\Documents and Settings\cnlocal\Desktop\StopMeIfYouCan.exe LocalSystem StopMe                       
 
-		.Example
+        .Example
 
-		PS C:\> Get-PotentiallyMisconfiguredServices -FilePath .\computers.txt -Credential (Get-Credential) | Format-Table PSComputerName, PathName, StartName, Name -AutoSize
+        PS C:\> Get-PotentiallyMisconfiguredServices -FilePath .\computers.txt -Credential (Get-Credential) | Format-Table PSComputerName, PathName, StartName, Name -AutoSize
 
-		PSComputerName PathName                                                     StartName   Name                         
-		-------------- --------                                                     ---------   ----                         
-		dc             C:\Windows\system32\svchost.exe -k UnistackSvcGroup                      CDPUserSvc_4f7fa             
-		dc             C:\Windows\system32\svchost.exe -k UnistackSvcGroup                      OneSyncSvc_4f7fa             
-		dc             C:\Windows\system32\svchost.exe -k UnistackSvcGroup                      PimIndexMaintenanceSvc_4f7fa 
-		dc             C:\Windows\System32\svchost.exe -k UnistackSvcGroup                      UnistoreSvc_4f7fa            
-		dc             C:\Windows\system32\svchost.exe -k UnistackSvcGroup                      UserDataSvc_4f7fa            
-		dc             C:\Windows\system32\svchost.exe -k UnistackSvcGroup                      WpnUserService_4f7fa         
-		client10e-01   C:\Windows\system32\svchost.exe -k UnistackSvcGroup                      CDPUserSvc_21c65a            
-		client10e-01   C:\Windows\system32\svchost.exe -k UnistackSvcGroup                      MessagingService_21c65a      
-		client10e-01   C:\Windows\system32\svchost.exe -k UnistackSvcGroup                      OneSyncSvc_21c65a            
-		client10e-01   C:\Windows\system32\svchost.exe -k UnistackSvcGroup                      PimIndexMaintenanceSvc_21c65a
-		client10e-01   C:\Windows\System32\svchost.exe -k UnistackSvcGroup                      UnistoreSvc_21c65a           
-		client10e-01   C:\Windows\system32\svchost.exe -k UnistackSvcGroup                      UserDataSvc_21c65a           
-		client10e-01   C:\Windows\system32\svchost.exe -k UnistackSvcGroup                      WpnUserService_21c65a        
-		client7-05     C:\Users\cnlocal\Desktop\StopMeIfYouCan.exe                  LocalSystem StopMe                       
-		client7sp1-06  C:\Users\cnuser\Desktop\StopMeIfYouCan.exe                   LocalSystem StopMe                       
-		clientxpsp3-07 C:\Documents and Settings\cnlocal\Desktop\StopMeIfYouCan.exe LocalSystem StopMe 
+        PSComputerName PathName                                                     StartName   Name                         
+        -------------- --------                                                     ---------   ----                         
+        dc             C:\Windows\system32\svchost.exe -k UnistackSvcGroup                      CDPUserSvc_4f7fa             
+        dc             C:\Windows\system32\svchost.exe -k UnistackSvcGroup                      OneSyncSvc_4f7fa             
+        dc             C:\Windows\system32\svchost.exe -k UnistackSvcGroup                      PimIndexMaintenanceSvc_4f7fa 
+        dc             C:\Windows\System32\svchost.exe -k UnistackSvcGroup                      UnistoreSvc_4f7fa            
+        dc             C:\Windows\system32\svchost.exe -k UnistackSvcGroup                      UserDataSvc_4f7fa            
+        dc             C:\Windows\system32\svchost.exe -k UnistackSvcGroup                      WpnUserService_4f7fa         
+        client10e-01   C:\Windows\system32\svchost.exe -k UnistackSvcGroup                      CDPUserSvc_21c65a            
+        client10e-01   C:\Windows\system32\svchost.exe -k UnistackSvcGroup                      MessagingService_21c65a      
+        client10e-01   C:\Windows\system32\svchost.exe -k UnistackSvcGroup                      OneSyncSvc_21c65a            
+        client10e-01   C:\Windows\system32\svchost.exe -k UnistackSvcGroup                      PimIndexMaintenanceSvc_21c65a
+        client10e-01   C:\Windows\System32\svchost.exe -k UnistackSvcGroup                      UnistoreSvc_21c65a           
+        client10e-01   C:\Windows\system32\svchost.exe -k UnistackSvcGroup                      UserDataSvc_21c65a           
+        client10e-01   C:\Windows\system32\svchost.exe -k UnistackSvcGroup                      WpnUserService_21c65a        
+        client7-05     C:\Users\cnlocal\Desktop\StopMeIfYouCan.exe                  LocalSystem StopMe                       
+        client7sp1-06  C:\Users\cnuser\Desktop\StopMeIfYouCan.exe                   LocalSystem StopMe                       
+        clientxpsp3-07 C:\Documents and Settings\cnlocal\Desktop\StopMeIfYouCan.exe LocalSystem StopMe 
 
-		.Outputs
-		System.ServiceProcess.ServiceController
-		This cmdlet returns objects that represent the services on the computer.
+        .Outputs
+        System.ServiceProcess.ServiceController
+        This cmdlet returns objects that represent the services on the computer.
 
-	#>
+    #>
 
     [CmdletBinding()]
     Param(
