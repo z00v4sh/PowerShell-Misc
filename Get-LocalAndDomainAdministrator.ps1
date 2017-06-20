@@ -153,7 +153,7 @@ Function Get-DomainAdmin {
         Write-Error -Message '[-] Local computer is not in a domain' -ErrorAction Stop
     }
 
-    $query = "Associators of {Win32_Group.Name='Domain Admins',Domain='$win32GroupDomain'} Where ResultClass=Win32_UserAccount"
+    $query = "Associators of {Win32_Group.Name='Domain Admins',Domain='$env:USERDOMAIN'} Where ResultClass=Win32_UserAccount"
   
     Get-CimInstance -Query $query
 
